@@ -22,6 +22,14 @@ function draw(){
     drawBall();
     x += dx;
     y += dy;
+    // bottom / top edge
+    if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+        dy = -dy;
+    }
+    // right / left edge
+    if (x + dx > canvas.width - ballRadius || x + dx <  ballRadius) {
+        dx = -dx;
+    }
 }
 
 setInterval(draw, 10);
