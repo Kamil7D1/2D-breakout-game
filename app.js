@@ -4,8 +4,8 @@ const ctx = canvas.getContext("2d");
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 
-let dx = 2;
-let dy = 2;
+let dx = 1;
+let dy = 1;
 
 let ballRadius = 10;
 
@@ -25,11 +25,15 @@ function draw(){
     // bottom / top edge
     if (y + dy < ballRadius) {
         dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {
-        alert("GAME OVER");
-        document.location.reload();
-        clearInterval(interval);
-    }
+      } else if (y + dy > canvas.height - ballRadius) {
+        if (x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+        } else {
+          alert("GAME OVER");
+          document.location.reload();
+          clearInterval(interval);
+        }
+      }
     // right / left edge
     if (x + dx > canvas.width - ballRadius || x + dx <  ballRadius) {
         dx = -dx;
