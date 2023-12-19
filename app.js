@@ -19,6 +19,7 @@ function drawBall() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height); // startX, startY, endX, endY. The whole area covered by this rectangle will be clered of any content painted there.
+  drawBricks();
   drawBall();
   x += dx;
   y += dy;
@@ -53,7 +54,6 @@ function draw() {
   }
 
   drawPaddle();
-  drawBricks();
 }
 
 const interval = setInterval(draw, 10);
@@ -109,15 +109,18 @@ for (let c = 0; c < brickColumnCount; c++) {
   }
 }
 
-console.log(bricks);
+const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
 
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
-      bricks[c][r].x = 0;
-      bricks[c][r].y = 0;
+      const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+      const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+      bricks[c][r].x = brickX;
+      bricks[c][r].y = brickY;
       ctx.beginPath();
-      ctx.rect(0, 0, brickWidth, brickHeight);
+      ctx.rect(brickX, brickY, brickWidth, brickHeight);
       ctx.fillStyle = "#0095DD";
       ctx.fill();
       ctx.closePath();
