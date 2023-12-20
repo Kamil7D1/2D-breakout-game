@@ -3,10 +3,10 @@ const ctx = canvas.getContext("2d");
 
 //canvas
 let x = canvas.width / 2;
-let y = canvas.height - 30;
+let y = canvas.height - 40;
 // ball
-let dx = 2;
-let dy = 2;
+let dx = 3;
+let dy = 3;
 let ballRadius = 10;
 // paddle
 const paddleHeight = 10;
@@ -49,8 +49,16 @@ function keyUpHandler(e) {
   }
 }
 
+function mouseMoveHandler(e) {
+  const relativeX = e.clientX - canvas.offsetLeft;
+  if (relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c++) {
@@ -144,9 +152,9 @@ function draw() {
   }
   // move right or left
   if (rightPressed) {
-    paddleX += 3;
+    paddleX += 2;
   } else if (leftPressed) {
-    paddleX -= 3;
+    paddleX -= 2;
   }
   // condition check that is paddle is in boundaries
   if (rightPressed) {
