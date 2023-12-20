@@ -20,9 +20,11 @@ function drawBall() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height); // startX, startY, endX, endY. The whole area covered by this rectangle will be clered of any content painted there.
   drawBricks();
+  collisionDetection();
   drawBall();
   x += dx;
   y += dy;
+  console.log(`x: ${x}, y: ${y}`);
   // top edge
   if (y + dy < ballRadius) {
     dy = -dy;
@@ -90,6 +92,17 @@ function keyUpHandler(e) {
   }
 }
 
+function collisionDetection() {
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      const b = bricks[c][r];
+      if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+        dy = -dy;
+      }
+    }
+  }
+}
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -108,9 +121,6 @@ for (let c = 0; c < brickColumnCount; c++) {
     bricks[c][r] = { x: 0, y: 0 };
   }
 }
-
-const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
 
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c++) {
