@@ -5,8 +5,8 @@ const ctx = canvas.getContext("2d");
 let x = canvas.width / 2;
 let y = canvas.height - 40;
 // ball
-let dx = 3;
-let dy = 3;
+let dx = 2;
+let dy = -2;
 let ballRadius = 10;
 // paddle
 const paddleHeight = 10;
@@ -24,6 +24,8 @@ const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 // score
 let score = 0;
+// lives
+let lives = 3;
 
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
@@ -51,6 +53,7 @@ function keyUpHandler(e) {
 
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
+  console.log(relativeX);
   if (relativeX > 0 && relativeX < canvas.width) {
     paddleX = relativeX - paddleWidth / 2;
   }
@@ -77,7 +80,7 @@ function collisionDetection() {
           if (score === brickRowCount * brickColumnCount) {
             alert("YOU WIN, CONGRATULATIONS!");
             document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
+            clearInterval(interval);
           }
         }
       }
@@ -125,14 +128,20 @@ function drawScore() {
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
+function drawLives() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height); // startX, startY, endX, endY. The whole area covered by this rectangle will be clered of any content painted there.
   drawBricks();
   drawBall();
   drawPaddle();
   drawScore();
+  drawLives();
   collisionDetection();
-  console.log(`x: ${x}, y: ${y}`);
   // top edge
   if (y + dy < ballRadius) {
     dy = -dy;
@@ -141,9 +150,18 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      alert("GAME OVER");
-      document.location.reload();
-      clearInterval(interval);
+      lives--;
+      if (!lives) {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval);
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
   // right / left edge
